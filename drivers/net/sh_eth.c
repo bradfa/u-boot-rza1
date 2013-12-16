@@ -1,7 +1,7 @@
 /*
  * sh_eth.c - Driver for Renesas ethernet controler.
  *
- * Copyright (C) 2008, 2011 Renesas Solutions Corp.
+ * Copyright (C) 2008-2013 Renesas Solutions Corp.
  * Copyright (c) 2008, 2011 Nobuhiro Iwamatsu
  * Copyright (c) 2007 Carlos Munoz <carlos@kenati.com>
  *
@@ -388,7 +388,9 @@ static int sh_eth_config(struct sh_eth_dev *eth, bd_t *bd)
 
 	sh_eth_write(eth, RFLR_RFL_MIN, RFLR);
 #if defined(SH_ETH_TYPE_GETHER)
+#if !defined(CONFIG_CPU_RZA1)
 	sh_eth_write(eth, 0, PIPR);
+#endif
 	sh_eth_write(eth, APR_AP, APR);
 	sh_eth_write(eth, MPR_MP, MPR);
 	sh_eth_write(eth, TPAUSER_TPAUSE, TPAUSER);
@@ -430,7 +432,7 @@ static int sh_eth_config(struct sh_eth_dev *eth, bd_t *bd)
 		sh_eth_write(eth, 0, RTRATE);
 #endif
 	}
-#if defined(SH_ETH_TYPE_GETHER)
+#if defined(SH_ETH_TYPE_GETHER) && !defined(CONFIG_CPU_RZA1)
 	else if (phy->speed == 1000) {
 		printf(SHETHER_NAME ": 1000Base/");
 		sh_eth_write(eth, GECMR_1000B, GECMR);
