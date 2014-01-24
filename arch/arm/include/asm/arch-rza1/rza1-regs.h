@@ -12,9 +12,15 @@
 #define RZA1_FRQCR_BASE          (0xFCFE0010)
 #define RZA1_STBCR_BASE          (0xFCFE0020)
 #define RZA1_PCTR_BASE           (0xFCFE3000)
+#define RZA1_SYSCR_BASE          (0xFCFE0400)
 #define RZA1_OST_BASE            (0xFCFEC000)
 #define RZA1_BCR_BASE            (0x3FFFC000)
 #define RZA1_SDRAM_BASE          (0x3FFFC000)
+
+/* System Control Registers */
+#define SYSCR1 (RZA1_SYSCR_BASE + 0x00)
+#define SYSCR2 (RZA1_SYSCR_BASE + 0x04)
+#define SYSCR3 (RZA1_SYSCR_BASE + 0x08)
 
 /* Clock Registers */
 #define FRQCR (RZA1_FRQCR_BASE + 0x00)
