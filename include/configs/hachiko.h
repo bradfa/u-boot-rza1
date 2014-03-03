@@ -42,7 +42,6 @@
 #define CONFIG_BOOTP_NTPSERVER
 #define CONFIG_BOOTP_TIMEOFFSET
 
-
 #define CONFIG_OF_LIBFDT
 #define CONFIG_CMDLINE_EDITING
 #define CONFIG_CMDLINE_TAG
@@ -54,22 +53,31 @@
 #endif
 
 #if !defined(CONFIG_RAM_64MB)
-#define CONFIG_EXTRA_ENV_SETTINGS \
-	"bootcmd=usb start ; run usbload ; bootm 20007fc0 - 20500000\0" \
-	"usbload=ext2load usb 0 20007fc0 /boot/uImage ; ext2load usb 0 20500000 /boot/rza1-hachiko.dtb\0"
+#define ENV_PARAMS 			\
+	"kernel_addr=0x20007fc0\0" 	\
+	"fdt_addr=0x20500000\0"		\
+	"initpath=init=/init\0"		\
+	"fbparam=\0"
 #else
-#define CONFIG_EXTRA_ENV_SETTINGS \
-	"bootcmd=usb start ; run usbload ; bootm 0f000000 - 0e500000\0" \
-	"usbload=ext2load usb 0 0f000000 /boot/uImage ; ext2load usb 0 0e500000 /boot/rza1-hachiko.dtb\0"
+#define ENV_PARAMS 			\
+	"kernel_addr=0x0f000000\0" 	\
+	"fdt_addr=0x0e500000\0"		\
+	"initpath=\0"			\
+	"fbparam=vdc5fb0=3 vdc5fb1=4\0"
 #endif
+
+#define CONFIG_BOOTCOMMAND \
+	"if run usbload; then run boot_usb; else run boot_nor; fi"
+
+#define CONFIG_EXTRA_ENV_SETTINGS 																	\
+	ENV_PARAMS 																			\
+	"usbload=usb start && ext2load usb 0 ${kernel_addr} /boot/uImage ; ext2load usb 0 ${fdt_addr} /boot/rza1-hachiko.dtb\0" 					\
+	"boot_usb=run setusbargs; bootm ${kernel_addr} - ${fdt_addr}\0" 												\
+	"boot_nor=run setnorargs; bootm 0x180c0000 - 0x184c0000\0" 													\
+	"setusbargs=setenv bootargs console=ttySC3,115200 root=/dev/sda1 rw rootdelay=3 ignore_loglevel earlyprintk=sh-sci.3,115200 ${initpath} ${fbparam}\0" 		\
+	"setnorargs=setenv bootargs console=ttySC3,115200 root=/dev/mtdblock4 rw rootfstype=jffs2 ignore_loglevel earlyprintk=sh-sci.3,115200 ${initpath} ${fbparam}\0"
 
 #define CONFIG_BAUDRATE		115200
-
-#if !defined(CONFIG_RAM_64MB)
-#define CONFIG_BOOTARGS		"console=ttySC3,115200 root=/dev/sda1 init=/init rw rootdelay=3 ignore_loglevel earlyprintk=sh-sci.3,115200"
-#else
-#define CONFIG_BOOTARGS		"console=ttySC3,115200 root=/dev/sda1 rw rootdelay=3 ignore_loglevel earlyprintk=sh-sci.3,115200 vdc5fb0=3 vdc5fb1=4"
-#endif
 
 #define CONFIG_BOOTDELAY	3
 #define CONFIG_SYS_BAUDRATE_TABLE	{ CONFIG_BAUDRATE }
