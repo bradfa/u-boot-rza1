@@ -244,9 +244,9 @@
 #define PIPC2_S		0xffff
 
 /* Port3 Control register Reset */
-#define PM3_D		0x007c	/* CS1, TxD2, RxD2, ET_MDIO, ET_RXCCLK
+#define PM3_D		0x00fc	/* CS1, TxD2, RxD2, ET_MDIO, ET_RXCCLK
 				   ET_RXER ET_RXDV */
-#define PMC3_D		0x00f5
+#define PMC3_D		0x0075
 #define PFC3_D		0x007d
 #define PFCE3_D		0x0084
 #define PFCAE3_D	0x0081
@@ -255,7 +255,7 @@
 #define PIPC3_D		0x00f7
 
 /* Port3 Control register Set */
-#define PMC3_S		0x00fd
+#define PMC3_S		0x007d
 #define PBDC3_S		0x0008
 #define PIPC3_S		0x00ff
 
